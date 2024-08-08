@@ -1,16 +1,28 @@
 import { ArrowRight } from 'lucide-react'
-import amaLogo from '../assets/ama-logo.svg'
 import { useNavigate } from 'react-router-dom'
+
+import amaLogo from '../assets/ama-logo.svg'
+import { createRoom } from '../http/create-room'
 
 export function CreateRoom() {
     const navigate = useNavigate()
 
-    function handleCreateRoom(data: FormData){
+    async function handleCreateRoom(data: FormData){
         const theme = data.get('theme')?.toString()
         
-        console.log(theme)
+        if (!theme) {
+            return
+        }
 
-        navigate("/room/fkashd")
+        try {
+            const { roomId } = await createRoom({theme})
+            
+            navigate(`/room/${roomId}`)
+            // navigate(`/room/${theme}`)
+        } catch (error) {
+            
+        }
+
     }
 
     return (
